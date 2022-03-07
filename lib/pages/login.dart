@@ -12,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreemState extends State<LoginScreen> {
+  bool isChecking = false;
   final _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
@@ -82,26 +83,28 @@ class _LoginScreemState extends State<LoginScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Material(
-                  elevation: 5,
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.redAccent,
-                  child: MaterialButton(
-                    padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    minWidth: MediaQuery.of(context).size.width,
-                    onPressed: () {
-                      handleLogin();
-                    },
-                    child: const Text(
-                      "Login",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+                isChecking
+                    ? const CircularProgressIndicator()
+                    : Material(
+                        elevation: 5,
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.redAccent,
+                        child: MaterialButton(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          minWidth: MediaQuery.of(context).size.width,
+                          onPressed: () {
+                            handleLogin();
+                          },
+                          child: const Text(
+                            "Login",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -132,30 +135,58 @@ class _LoginScreemState extends State<LoginScreen> {
   handleLogin() {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        isChecking = true;
+      });
       final formData = _formKey.currentState!.value;
-      FirebaseFirestore.instance
-          .collection("users")
-          .where("email", isEqualTo: formData['email'])
-          .get()
-          .then((querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          if (doc['status'] == 'verifier' &&
-              doc['password'] == formData['password']) {
-            // print('verifier');
-            Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return CheckIdentity();
-            }));
-          }
-          if (doc['status'] == 'patient') {
-            print('patient');
-          }
-          if (doc['status'] == 'admin') {
-            print('patient');
-          }
-        });
-        // print();
+      DocumentReference userLogin =
+          FirebaseFirestore.instance.collection("users").doc(formData['email']);
+
+      userLogin.get().then((value) {
+        if (value['role'] == 'verifier' &&
+            value['password'] == formData['password']) {
+          setState(() {
+            isChecking = false;
+          });
+          // print('verifier');
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return CheckIdentity();
+          }));
+        }
+
+        if (value['role'] == 'verifier' &&
+            value['password'] != formData['password']) {
+          setState(() {
+            isChecking = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 10),
+            content: const Text("Password not correct "),
+            action: SnackBarAction(label: "Retry Again", onPressed: () {}),
+          ));
+        }
+        if (value['role'] == 'patient') {
+          setState(() {
+            isChecking = false;
+          });
+          print('patient');
+        }
+        if (value['role'] == 'admin') {
+          setState(() {
+            isChecking = false;
+          });
+          print('patient');
+        }
       }).catchError((e) {
-        print(e.message);
+        // print(e.message);
+        setState(() {
+          isChecking = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: const Duration(seconds: 10),
+          content: const Text("Email not registered, contact Admin"),
+          action: SnackBarAction(label: "Try Again", onPressed: () {}),
+        ));
       });
     }
   }
