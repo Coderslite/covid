@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:covid_19/pages/admin/admin_home.dart';
 import 'package:covid_19/pages/check_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -13,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreemState extends State<LoginScreen> {
   bool isChecking = false;
+  bool obscure = true;
   final _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
@@ -63,7 +65,7 @@ class _LoginScreemState extends State<LoginScreen> {
                     name: 'password',
                     autofocus: false,
                     // controller: passwordController,
-                    obscureText: true,
+                    obscureText: obscure,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context),
                       FormBuilderValidators.minLength(context, 6)
@@ -73,6 +75,15 @@ class _LoginScreemState extends State<LoginScreen> {
                     },
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscure = !obscure;
+                            });
+                          },
+                          icon: obscure
+                              ? Icon(Icons.remove_red_eye_sharp)
+                              : Icon(Icons.visibility_off_outlined)),
                       prefixIcon: const Icon(Icons.vpn_key),
                       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                       hintText: "Password",
@@ -171,11 +182,21 @@ class _LoginScreemState extends State<LoginScreen> {
           });
           print('patient');
         }
-        if (value['role'] == 'admin') {
+        if (value['role'] == 'admin' &&
+            value['password'] == formData['password']) {
           setState(() {
             isChecking = false;
           });
-          print('patient');
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return AdminHome();
+          }));
+        }
+        if (value['role'] == 'admin' &&
+            value['password'] != formData['password']) {
+          setState(() {
+            isChecking = false;
+          });
+          print('password not correct');
         }
       }).catchError((e) {
         // print(e.message);
