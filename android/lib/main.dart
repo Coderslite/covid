@@ -1,7 +1,7 @@
 import 'package:covid_19/pages/check_identity.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/services.dart';
-// import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:covid_19/pages/login.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +49,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.red,
       ),
-      // home: const CheckIdentity(),
-      home: const LoginScreen(),
+      home: const CheckIdentity(),
     );
   }
 }

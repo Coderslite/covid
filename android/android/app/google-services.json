@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "509015373475",
-    "project_id": "covid-19-vaccination-42921",
-    "storage_bucket": "covid-19-vaccination-42921.appspot.com"
+    "project_number": "684865552396",
+    "project_id": "covid-19-vaccination-22a95",
+    "storage_bucket": "covid-19-vaccination-22a95.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:509015373475:android:6df812155370ccd6bb7116",
+        "mobilesdk_app_id": "1:684865552396:android:f5119224db3b8037842e29",
         "android_client_info": {
           "package_name": "com.example.covid_19"
         }
       },
       "oauth_client": [
         {
-          "client_id": "509015373475-louogj71tt09s5mg2dhpald644uv829n.apps.googleusercontent.com",
+          "client_id": "684865552396-mbdtqrk5li0ba5es7e6eo6tn25ibjm2v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.covid_19",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "509015373475-0q31j83s3ajdnrdf8djehrb0l10net26.apps.googleusercontent.com",
+          "client_id": "684865552396-okntl76r2av12gci7t5fdlugi0d23ldq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCJRWeUZBbmEi1Tm9kqjPpMfoglnYdwpU4"
+          "current_key": "AIzaSyCjjaq6eqB-mb_AtW9K95O4_inxka3ZwNo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "509015373475-0q31j83s3ajdnrdf8djehrb0l10net26.apps.googleusercontent.com",
+              "client_id": "684865552396-okntl76r2av12gci7t5fdlugi0d23ldq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
