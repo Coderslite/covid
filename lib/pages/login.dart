@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:covid_19/pages/admin/admin_home.dart';
+import 'package:covid_19/pages/admin/admin_root.dart';
 import 'package:covid_19/pages/check_identity.dart';
+import 'package:covid_19/pages/verifier/verifier_root.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -160,9 +162,15 @@ class _LoginScreemState extends State<LoginScreen> {
             isChecking = false;
           });
           // print('verifier');
-          Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return CheckIdentity();
-          }));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) {
+                // return const CheckIdentity();
+                return const VerifierRoot();
+              },
+            ),
+          );
         }
 
         if (value['role'] == 'verifier' &&
@@ -176,6 +184,29 @@ class _LoginScreemState extends State<LoginScreen> {
             action: SnackBarAction(label: "Retry Again", onPressed: () {}),
           ));
         }
+        if (value['role'] == 'registrar' &&
+            value['password'] == formData['password']) {
+          setState(() {
+            isChecking = false;
+          });
+          // print('verifier');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) {
+                // return const CheckIdentity();
+                return const CheckIdentity();
+              },
+            ),
+          );
+        }
+        if (value['role'] == 'registrar' &&
+            value['password'] != formData['password']) {
+          setState(() {
+            isChecking = false;
+          });
+          print('password not correct');
+        }
         if (value['role'] == 'patient') {
           setState(() {
             isChecking = false;
@@ -187,8 +218,10 @@ class _LoginScreemState extends State<LoginScreen> {
           setState(() {
             isChecking = false;
           });
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return AdminHome();
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return AdminRoot(
+              navigateIndex: 0,
+            );
           }));
         }
         if (value['role'] == 'admin' &&
