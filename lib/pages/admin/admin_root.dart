@@ -1,5 +1,6 @@
 import 'package:covid_19/pages/admin/admin_home.dart';
 import 'package:covid_19/pages/admin/register.dart';
+import 'package:covid_19/pages/admin/registered_users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -48,9 +49,10 @@ class _AdminRootState extends State<AdminRoot> {
       const Center(
         child: Text(""),
       ),
-      const Center(
-        child: Text("Nothing yet"),
-      ),
+      const RegisteredUserList(),
+      // const Center(
+      //   child: Text("Nothing yet"),
+      // ),
       // const ProfileScreen(),
     ];
     return IndexedStack(
