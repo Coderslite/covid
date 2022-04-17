@@ -270,7 +270,9 @@ class _RegisterState extends State<Register> {
                         handleRegister();
                       },
                       child: isLoading
-                          ? const CircularProgressIndicator()
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
                           : const Text(
                               "Login",
                               textAlign: TextAlign.center,
