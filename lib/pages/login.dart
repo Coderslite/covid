@@ -24,6 +24,7 @@ class _LoginScreemState extends State<LoginScreen> {
       appBar: AppBar(
         title: const Text("Login"),
         backgroundColor: Colors.redAccent,
+        automaticallyImplyLeading:false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(30),

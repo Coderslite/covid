@@ -16,7 +16,7 @@ class RegisteredUserUpdate extends StatefulWidget {
 
 class _RegisteredUserUpdateState extends State<RegisteredUserUpdate> {
   final _formKey = GlobalKey<FormBuilderState>();
-  TextEditingController dateController = TextEditingController();
+  // TextEditingController dateController = TextEditingController();
   bool isValidating = false;
   @override
   Widget build(BuildContext context) {
@@ -39,6 +39,8 @@ class _RegisteredUserUpdateState extends State<RegisteredUserUpdate> {
               if (snapshot.hasData) {
                 List<QueryDocumentSnapshot<Object?>>? data =
                     snapshot.data?.docs;
+                var date = DateFormat("dd-MM-yyyy").parse(data?[0]['dob']);
+                var dob = DateTime.parse(date.toString());
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -186,30 +188,29 @@ class _RegisteredUserUpdateState extends State<RegisteredUserUpdate> {
                             SizedBox(
                               height: 20,
                             ),
-                            FormBuilderDateTimePicker(
-                              name: 'dob',
-                              initialValue: DateFormat("dd-MM-yyyy")
-                                  .parse(data?[0]['dob']),
-                              keyboardType: TextInputType.datetime,
-                              controller: dateController,
-                              inputType: InputType.date,
-                              format: DateFormat("dd-MM-yyyy"),
-                              validator: FormBuilderValidators.compose([
-                                // FormBuilderValidators.required(context),
-                              ]),
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.person),
-                                contentPadding:
-                                    const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                                hintText: "Date of birth",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            // FormBuilderDateTimePicker(
+                            //   name: 'dob',
+                            //   initialValue: dob,
+                            //   keyboardType: TextInputType.datetime,
+                            //   controller: dateController,
+                            //   inputType: InputType.date,
+                            //   format: DateFormat("dd-MM-yyyy"),
+                            //   validator: FormBuilderValidators.compose([
+                            //     // FormBuilderValidators.required(context),
+                            //   ]),
+                            //   decoration: InputDecoration(
+                            //     prefixIcon: const Icon(Icons.person),
+                            //     contentPadding:
+                            //         const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                            //     hintText: "Date of birth",
+                            //     border: OutlineInputBorder(
+                            //       borderRadius: BorderRadius.circular(10),
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 20,
+                            // ),
                             FormBuilderDropdown(
                               name: 'vaccineType',
                               initialValue: data?[0]['vaccineType'],
@@ -221,6 +222,7 @@ class _RegisteredUserUpdateState extends State<RegisteredUserUpdate> {
                                 "Moderna",
                                 "Fizer",
                                 "Sinoform",
+                                "Janssen",
                               ].map((option) {
                                 return DropdownMenuItem(
                                   child: Text("$option"),
@@ -252,7 +254,7 @@ class _RegisteredUserUpdateState extends State<RegisteredUserUpdate> {
                                       minWidth:
                                           MediaQuery.of(context).size.width,
                                       onPressed: () {
-                                        handleUpdate(dateController.text);
+                                        handleUpdate();
                                       },
                                       child: const Text(
                                         "Update Data",
@@ -277,7 +279,7 @@ class _RegisteredUserUpdateState extends State<RegisteredUserUpdate> {
     );
   }
 
-  handleUpdate(date) async {
+  handleUpdate() async {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -293,13 +295,11 @@ class _RegisteredUserUpdateState extends State<RegisteredUserUpdate> {
             .collection("registeredIndividual")
             .doc(registerUser.id)
             .update({
-          'id': registerUser.id.toString(),
-          'dob': date.toString(),
+          'id': registerUser.id,
+          // 'dob': date,
           'status': 'firstDoseDone',
-          'createdOn':
-              DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
-          'lastUpadte':
-              DateFormat("dd-MM-yyyy").format(DateTime.now()).toString()
+          'createdOn': DateFormat("dd-MM-yyyy").format(DateTime.now()),
+          'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
         }).then((value) {
           Fluttertoast.showToast(
               msg: "Individual record has been stored successfully");

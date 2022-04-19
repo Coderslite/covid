@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:covid_19/pages/login.dart';
 
 class CheckIdentity extends StatefulWidget {
   const CheckIdentity({Key? key}) : super(key: key);
@@ -23,6 +24,18 @@ class _CheckIdentityState extends State<CheckIdentity> {
       appBar: AppBar(
         title: const Text("Check User Vacination State"),
         backgroundColor: Colors.redAccent,
+        automaticallyImplyLeading: false,
+      ),
+      floatingActionButton: CircleAvatar(
+        backgroundColor: Colors.redAccent,
+        child: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) {
+                return const LoginScreen();
+              }));
+            },
+            icon: const Icon(Icons.logout_rounded)),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -124,7 +137,9 @@ class _CheckIdentityState extends State<CheckIdentity> {
                 label: "Print Certificate",
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return CertificateScreen(id: formData['identityNumber'],);
+                    return CertificateScreen(
+                      id: formData['identityNumber'],
+                    );
                   }));
                 }),
           ));

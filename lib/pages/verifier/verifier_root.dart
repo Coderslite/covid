@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:covid_19/pages/login.dart';
 import 'package:covid_19/pages/verifier/vacination_location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,18 @@ class VerifierRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Demo Home Page')),
+      appBar: AppBar(title: const Text('Verifier Panel')),
+            floatingActionButton: CircleAvatar(
+        backgroundColor: Colors.redAccent,
+        child: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) {
+                return const LoginScreen();
+              }));
+            },
+            icon: const Icon(Icons.logout_rounded)),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

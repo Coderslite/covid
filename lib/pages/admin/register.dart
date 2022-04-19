@@ -274,7 +274,7 @@ class _RegisterState extends State<Register> {
                               color: Colors.white,
                             )
                           : const Text(
-                              "Login",
+                              "Register",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 20,

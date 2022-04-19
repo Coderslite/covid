@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:covid_19/pages/admin/widget/admin_count.dart';
 import 'package:covid_19/pages/admin/widget/registrar_count.dart';
 import 'package:covid_19/pages/admin/widget/verifier_count.dart';
 import 'package:covid_19/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AdminHomeScreen extends StatefulWidget {
@@ -20,6 +18,21 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: CircleAvatar(
+        backgroundColor: Colors.redAccent,
+        child: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) {
+                    return const LoginScreen();
+                  },
+                ),
+              );
+            },
+            icon: const Icon(Icons.logout_rounded)),
+      ),
       // appBar: AppBar(
       //     title: const Text(
       //       "Admin Dashboard",

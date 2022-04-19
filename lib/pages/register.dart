@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:covid_19/pages/certificate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -193,11 +194,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         FormBuilderValidators.required(context),
                       ]),
                       isExpanded: true,
-                      items: [
-                        "Moderna",
-                        "Fizer",
-                        "Sinoform",
-                      ].map((option) {
+                      items: ["Moderna", "Fizer", "Sinoform", "Janssen"]
+                          .map((option) {
                         return DropdownMenuItem(
                           child: Text("$option"),
                           value: option,
@@ -261,28 +259,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
           .collection("registeredIndividual")
           .doc(formData['identityNumber']);
       registerUser.set(formData).whenComplete(() {
-        FirebaseFirestore.instance
-            .collection("registeredIndividual")
-            .doc(registerUser.id)
-            .update({
-          'id': registerUser.id,
-          'dob': date,
-          'status': 'firstDoseDone',
-          'createdOn': DateFormat("dd-MM-yyyy").format(DateTime.now()),
-          'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
-        }).then((value) {
-          Fluttertoast.showToast(
-              msg: "Individual record has been stored successfully");
-          setState(() {
-            isValidating = false;
-          });
-        }).catchError((e) {
-          Fluttertoast.showToast(msg: e.message);
-          // print(e.message);
-          setState(() {
-            isValidating = false;
-          });
-        });
+        formData['vaccineType'] == 'Janssen'
+            ? FirebaseFirestore.instance
+                .collection("registeredIndividual")
+                .doc(registerUser.id)
+                .update({
+                'id': registerUser.id,
+                'dob': date,
+                'status': 'secondDoseDone',
+                'createdOn': DateFormat("dd-MM-yyyy").format(DateTime.now()),
+                'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
+              }).then((value) {
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                  return CertificateScreen(id: registerUser.id);
+                }));
+                Fluttertoast.showToast(
+                    msg: "Individual record has been stored successfully");
+                setState(() {
+                  isValidating = false;
+                });
+              }).catchError((e) {
+                Fluttertoast.showToast(msg: e.message);
+                // print(e.message);
+                setState(() {
+                  isValidating = false;
+                });
+              })
+            : FirebaseFirestore.instance
+                .collection("registeredIndividual")
+                .doc(registerUser.id)
+                .update({
+                'id': registerUser.id,
+                'dob': date,
+                'status': 'firstDoseDone',
+                'createdOn': DateFormat("dd-MM-yyyy").format(DateTime.now()),
+                'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
+              }).then((value) {
+                Fluttertoast.showToast(
+                    msg: "Individual record has been stored successfully");
+                setState(() {
+                  isValidating = false;
+                });
+              }).catchError((e) {
+                Fluttertoast.showToast(msg: e.message);
+                // print(e.message);
+                setState(() {
+                  isValidating = false;
+                });
+              });
       });
     }
   }
