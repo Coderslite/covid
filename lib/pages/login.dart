@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:covid_19/pages/admin/admin_home.dart';
 import 'package:covid_19/pages/admin/admin_root.dart';
+import 'package:covid_19/pages/certificate.dart';
 import 'package:covid_19/pages/check_identity.dart';
 import 'package:covid_19/pages/verifier/verifier_root.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _LoginScreemState extends State<LoginScreen> {
       appBar: AppBar(
         title: const Text("Login"),
         backgroundColor: Colors.redAccent,
-        automaticallyImplyLeading:false,
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(30),
@@ -207,12 +208,33 @@ class _LoginScreemState extends State<LoginScreen> {
             isChecking = false;
           });
           print('password not correct');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 10),
+            content: const Text("Password not correct "),
+            action: SnackBarAction(label: "Retry Again", onPressed: () {}),
+          ));
         }
-        if (value['role'] == 'patient') {
+        if (value['role'] == 'patient' &&
+            value['password'] == formData['password']) {
           setState(() {
             isChecking = false;
           });
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return CertificateScreen(email: value['email']);
+          }));
           print('patient');
+        }
+        if (value['role'] == 'patient' &&
+            value['password'] != formData['password']) {
+          setState(() {
+            isChecking = false;
+          });
+          print('password not correct');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 10),
+            content: const Text("Password not correct "),
+            action: SnackBarAction(label: "Retry Again", onPressed: () {}),
+          ));
         }
         if (value['role'] == 'admin' &&
             value['password'] == formData['password']) {
@@ -230,6 +252,11 @@ class _LoginScreemState extends State<LoginScreen> {
           setState(() {
             isChecking = false;
           });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 10),
+            content: const Text("Password not correct "),
+            action: SnackBarAction(label: "Retry Again", onPressed: () {}),
+          ));
           print('password not correct');
         }
       }).catchError((e) {

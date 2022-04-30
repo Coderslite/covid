@@ -3,10 +3,11 @@ import 'package:covid_19/pages/certificate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:intl/intl.dart';
 
 class SecondDose extends StatefulWidget {
-  final String id;
-  const SecondDose({Key? key, required this.id}) : super(key: key);
+  final String email;
+  const SecondDose({Key? key, required this.email}) : super(key: key);
 
   @override
   State<SecondDose> createState() => _SecondDoseState();
@@ -24,7 +25,7 @@ class _SecondDoseState extends State<SecondDose> {
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection("registeredIndividual")
-              .doc(widget.id)
+              .doc(widget.email)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -138,10 +139,12 @@ class _SecondDoseState extends State<SecondDose> {
     setState(() {
       isValidating = true;
     });
-    DocumentReference doc = FirebaseFirestore.instance
-        .collection("registeredIndividual")
-        .doc(widget.id);
-    doc.update({'status': 'secondDoseDone'}).whenComplete(() {
+    DocumentReference doc =
+        FirebaseFirestore.instance.collection("users").doc(widget.email);
+    doc.update({
+      'status': 'secondDoseDone',
+      'secondDose': DateFormat("dd-MM-yyyy").format(DateTime.now())
+    }).whenComplete(() {
       setState(() {
         isValidating = false;
       });
@@ -153,7 +156,7 @@ class _SecondDoseState extends State<SecondDose> {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return CertificateScreen(
-                  id: widget.id,
+                  email: widget.email,
                 );
               }));
             }),

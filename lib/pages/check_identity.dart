@@ -48,16 +48,16 @@ class _CheckIdentityState extends State<CheckIdentity> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FormBuilderTextField(
-                    name: 'identityNumber',
-                    keyboardType: TextInputType.number,
+                    name: 'email',
+                    keyboardType: TextInputType.emailAddress,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context),
-                      FormBuilderValidators.numeric(context),
+                      FormBuilderValidators.email(context),
                     ]),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.perm_identity_outlined),
                       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      hintText: "CNIC/POR",
+                      hintText: "Enter Email Address",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -104,9 +104,8 @@ class _CheckIdentityState extends State<CheckIdentity> {
       setState(() {
         isValidating = true;
       });
-      DocumentReference getDetails = FirebaseFirestore.instance
-          .collection("registeredIndividual")
-          .doc(formData['identityNumber']);
+      var getDetails = FirebaseFirestore.instance
+          .collection("users").doc(formData['email']);
 
       getDetails.get().then((value) {
         setState(() {
@@ -121,7 +120,7 @@ class _CheckIdentityState extends State<CheckIdentity> {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return SecondDose(
-                      id: value['id'],
+                      email: value['email'],
                     );
                   }));
                 }),
@@ -138,7 +137,7 @@ class _CheckIdentityState extends State<CheckIdentity> {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return CertificateScreen(
-                      id: formData['identityNumber'],
+                      email: value['email'],
                     );
                   }));
                 }),

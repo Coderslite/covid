@@ -14,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  bool obscure = false;
   final _formKey = GlobalKey<FormBuilderState>();
   TextEditingController dateController = TextEditingController();
   bool isValidating = false;
@@ -71,6 +72,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         contentPadding:
                             const EdgeInsets.fromLTRB(20, 15, 20, 15),
                         hintText: "Enter Email Address",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    FormBuilderTextField(
+                      name: 'password',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context),
+                      ]),
+                      obscureText: obscure,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscure = !obscure;
+                            });
+                          },
+                          icon: obscure
+                              ? Icon(Icons.visibility_outlined)
+                              : Icon(Icons.visibility_off_outlined),
+                        ),
+                        prefixIcon: const Icon(Icons.email),
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                        hintText: "Enter Password",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -255,23 +286,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
       final formData = _formKey.currentState!.value;
       // formData.update({'':''})
-      DocumentReference registerUser = FirebaseFirestore.instance
-          .collection("registeredIndividual")
-          .doc(formData['identityNumber']);
+      DocumentReference registerUser =
+          FirebaseFirestore.instance.collection("users").doc(formData['email']);
       registerUser.set(formData).whenComplete(() {
         formData['vaccineType'] == 'Janssen'
             ? FirebaseFirestore.instance
-                .collection("registeredIndividual")
-                .doc(registerUser.id)
+                .collection("users")
+                .doc(formData['email'])
                 .update({
                 'id': registerUser.id,
                 'dob': date,
                 'status': 'secondDoseDone',
-                'createdOn': DateFormat("dd-MM-yyyy").format(DateTime.now()),
-                'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
+                'role': 'patient',
+                'firstDose': DateFormat("dd-MM-yyyy").format(DateTime.now()),
+                // 'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
               }).then((value) {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return CertificateScreen(id: registerUser.id);
+                  return CertificateScreen(email: formData['email']);
                 }));
                 Fluttertoast.showToast(
                     msg: "Individual record has been stored successfully");
@@ -286,14 +317,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 });
               })
             : FirebaseFirestore.instance
-                .collection("registeredIndividual")
-                .doc(registerUser.id)
+                .collection("users")
+                .doc(formData['email'])
                 .update({
                 'id': registerUser.id,
                 'dob': date,
+                'role': 'patient',
                 'status': 'firstDoseDone',
-                'createdOn': DateFormat("dd-MM-yyyy").format(DateTime.now()),
-                'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
+                'firstDose': DateFormat("dd-MM-yyyy").format(DateTime.now()),
+                // 'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
               }).then((value) {
                 Fluttertoast.showToast(
                     msg: "Individual record has been stored successfully");
