@@ -48,16 +48,16 @@ class _CheckIdentityState extends State<CheckIdentity> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FormBuilderTextField(
-                    name: 'email',
-                    keyboardType: TextInputType.emailAddress,
+                    name: 'identityNumber',
+                    keyboardType: TextInputType.number,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(context),
-                      FormBuilderValidators.email(context),
+                      FormBuilderValidators.numeric(context),
                     ]),
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.perm_identity_outlined),
                       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      hintText: "Enter Email Address",
+                      hintText: "Enter Cnic",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -105,8 +105,8 @@ class _CheckIdentityState extends State<CheckIdentity> {
         isValidating = true;
       });
       var getDetails = FirebaseFirestore.instance
-          .collection("users").doc(formData['email']);
-
+          .collection("registeredIndividual")
+          .doc(formData['identityNumber']);
       getDetails.get().then((value) {
         setState(() {
           isValidating = false;
@@ -120,7 +120,7 @@ class _CheckIdentityState extends State<CheckIdentity> {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return SecondDose(
-                      email: value['email'],
+                      identityNumber: value['identityNumber'],
                     );
                   }));
                 }),
@@ -137,7 +137,7 @@ class _CheckIdentityState extends State<CheckIdentity> {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return CertificateScreen(
-                      email: value['email'],
+                      identityNumber: value['identityNumber'],
                     );
                   }));
                 }),

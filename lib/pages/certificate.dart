@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class CertificateScreen extends StatefulWidget {
-  final String email;
-  const CertificateScreen({Key? key, required this.email}) : super(key: key);
+  final String identityNumber;
+  const CertificateScreen({Key? key, required this.identityNumber})
+      : super(key: key);
 
   @override
   State<CertificateScreen> createState() => _CertificateScreenState();
@@ -33,8 +34,8 @@ class _CertificateScreenState extends State<CertificateScreen> {
       body: SingleChildScrollView(
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection("users")
-                .doc(widget.email)
+                .collection("registeredIndividual")
+                .doc(widget.identityNumber)
                 .snapshots(),
             builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (snapshot.hasError) {

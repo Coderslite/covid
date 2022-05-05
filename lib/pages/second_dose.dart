@@ -6,8 +6,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 
 class SecondDose extends StatefulWidget {
-  final String email;
-  const SecondDose({Key? key, required this.email}) : super(key: key);
+  final String identityNumber;
+  const SecondDose({Key? key, required this.identityNumber}) : super(key: key);
 
   @override
   State<SecondDose> createState() => _SecondDoseState();
@@ -25,7 +25,7 @@ class _SecondDoseState extends State<SecondDose> {
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection("registeredIndividual")
-              .doc(widget.email)
+              .doc(widget.identityNumber)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -140,7 +140,7 @@ class _SecondDoseState extends State<SecondDose> {
       isValidating = true;
     });
     DocumentReference doc =
-        FirebaseFirestore.instance.collection("users").doc(widget.email);
+        FirebaseFirestore.instance.collection("registeredIndividual").doc(widget.identityNumber);
     doc.update({
       'status': 'secondDoseDone',
       'secondDose': DateFormat("dd-MM-yyyy").format(DateTime.now())
@@ -156,7 +156,7 @@ class _SecondDoseState extends State<SecondDose> {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return CertificateScreen(
-                  email: widget.email,
+                  identityNumber:widget.identityNumber,
                 );
               }));
             }),

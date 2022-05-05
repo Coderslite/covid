@@ -3,6 +3,7 @@ import 'package:covid_19/pages/admin/admin_home.dart';
 import 'package:covid_19/pages/admin/admin_root.dart';
 import 'package:covid_19/pages/certificate.dart';
 import 'package:covid_19/pages/check_identity.dart';
+import 'package:covid_19/pages/second_dose.dart';
 import 'package:covid_19/pages/verifier/verifier_root.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -123,22 +124,22 @@ class _LoginScreemState extends State<LoginScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Dont have an account ? "),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Text(
-                        "Register Now",
-                        style: TextStyle(color: Colors.redAccent),
-                      ),
-                    ),
-                  ],
-                )
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const Text("Dont have an account ? "),
+                //     SizedBox(
+                //       width: 10,
+                //     ),
+                //     GestureDetector(
+                //       onTap: () {},
+                //       child: Text(
+                //         "Register Now",
+                //         style: TextStyle(color: Colors.redAccent),
+                //       ),
+                //     ),
+                //   ],
+                // )
               ],
             ),
           ),
@@ -214,28 +215,28 @@ class _LoginScreemState extends State<LoginScreen> {
             action: SnackBarAction(label: "Retry Again", onPressed: () {}),
           ));
         }
-        if (value['role'] == 'patient' &&
-            value['password'] == formData['password']) {
-          setState(() {
-            isChecking = false;
-          });
-          Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return CertificateScreen(email: value['email']);
-          }));
-          print('patient');
-        }
-        if (value['role'] == 'patient' &&
-            value['password'] != formData['password']) {
-          setState(() {
-            isChecking = false;
-          });
-          print('password not correct');
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            duration: const Duration(seconds: 10),
-            content: const Text("Password not correct "),
-            action: SnackBarAction(label: "Retry Again", onPressed: () {}),
-          ));
-        }
+        // if (value['role'] == 'patient' &&
+        //     value['password'] == formData['password']) {
+        //   setState(() {
+        //     isChecking = false;
+        //   });
+        //   Navigator.push(context, MaterialPageRoute(builder: (_) {
+        //     return CertificateScreen(identityNumber: value['identityNumber']);
+        //   }));
+        //   print('patient');
+        // }
+        // if (value['role'] == 'patient' &&
+        //     value['password'] != formData['password']) {
+        //   setState(() {
+        //     isChecking = false;
+        //   });
+        //   print('password not correct');
+        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //     duration: const Duration(seconds: 10),
+        //     content: const Text("Password not correct "),
+        //     action: SnackBarAction(label: "Retry Again", onPressed: () {}),
+        //   ));
+        // }
         if (value['role'] == 'admin' &&
             value['password'] == formData['password']) {
           setState(() {
@@ -264,11 +265,55 @@ class _LoginScreemState extends State<LoginScreen> {
         setState(() {
           isChecking = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          duration: const Duration(seconds: 10),
-          content: const Text("Email not registered, contact Admin"),
-          action: SnackBarAction(label: "Try Again", onPressed: () {}),
-        ));
+        FirebaseFirestore.instance
+            .collection("registeredIndividual")
+            .where('email', isEqualTo: formData['email'])
+            .get()
+            .then((value) {
+          var userData = value.docs[0];
+          if (userData['email'] == formData['email'] &&
+              userData['password'] == formData['password']) {
+            if (userData['status'] == 'firstDoseDone') {
+              print("first dose done");
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                duration: const Duration(seconds: 10),
+                content: const Text("First Dose Done !!!"),
+                action: SnackBarAction(
+                    label: "Next Dose",
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return SecondDose(
+                          identityNumber: userData['identityNumber'],
+                        );
+                      }));
+                    }),
+              ));
+            } else {
+              print("second dose done");
+
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return CertificateScreen(
+                  identityNumber: userData['identityNumber'],
+                );
+              }));
+            }
+          } else if (userData['email'] == formData['email'] &&
+              userData['password'] != formData['password']) {
+            print("password not correct");
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              duration: const Duration(seconds: 10),
+              content: const Text("User not found "),
+              action: SnackBarAction(label: "Retry Again", onPressed: () {}),
+            ));
+          }
+        }).catchError((e) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 10),
+            content: const Text("User not found"),
+            action: SnackBarAction(label: "Retry Again", onPressed: () {}),
+          ));
+        });
       });
     }
   }

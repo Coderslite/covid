@@ -286,13 +286,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
       final formData = _formKey.currentState!.value;
       // formData.update({'':''})
-      DocumentReference registerUser =
-          FirebaseFirestore.instance.collection("users").doc(formData['email']);
+      DocumentReference registerUser = FirebaseFirestore.instance
+          .collection("registeredIndividual")
+          .doc(formData['identityNumber']);
       registerUser.set(formData).whenComplete(() {
         formData['vaccineType'] == 'Janssen'
             ? FirebaseFirestore.instance
-                .collection("users")
-                .doc(formData['email'])
+                .collection("registeredIndividual")
+                .doc(formData['identityNumber'])
                 .update({
                 'id': registerUser.id,
                 'dob': date,
@@ -302,7 +303,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 // 'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
               }).then((value) {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return CertificateScreen(email: formData['email']);
+                  return CertificateScreen(identityNumber: formData['identityNumber']);
                 }));
                 Fluttertoast.showToast(
                     msg: "Individual record has been stored successfully");
@@ -317,8 +318,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 });
               })
             : FirebaseFirestore.instance
-                .collection("users")
-                .doc(formData['email'])
+                .collection("registeredIndividual")
+                .doc(formData['identityNumber'])
                 .update({
                 'id': registerUser.id,
                 'dob': date,
