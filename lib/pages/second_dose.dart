@@ -139,8 +139,9 @@ class _SecondDoseState extends State<SecondDose> {
     setState(() {
       isValidating = true;
     });
-    DocumentReference doc =
-        FirebaseFirestore.instance.collection("registeredIndividual").doc(widget.identityNumber);
+    DocumentReference doc = FirebaseFirestore.instance
+        .collection("registeredIndividual")
+        .doc(widget.identityNumber);
     doc.update({
       'status': 'secondDoseDone',
       'secondDose': DateFormat("dd-MM-yyyy").format(DateTime.now())
@@ -156,7 +157,7 @@ class _SecondDoseState extends State<SecondDose> {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return CertificateScreen(
-                  identityNumber:widget.identityNumber,
+                  identityNumber: widget.identityNumber,
                 );
               }));
             }),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:covid_19/pages/certificate.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  // String vaccineType = '';
   bool obscure = false;
   final _formKey = GlobalKey<FormBuilderState>();
   TextEditingController dateController = TextEditingController();
@@ -245,6 +248,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       height: 20,
                     ),
+                    FormBuilderTextField(
+                      name: 'vaccineID',
+                      keyboardType: TextInputType.text,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context),
+                      ]),
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.person),
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                        hintText: "Vaccine ID",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     isValidating
                         ? const CircularProgressIndicator()
                         : Material(
@@ -285,6 +307,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         isValidating = true;
       });
       final formData = _formKey.currentState!.value;
+
+      int min = 1000000000; //min and max values act as your 6 digit range
+      int max = 9999999999;
+      var randomizer = new Random();
+      var rNum = min + randomizer.nextInt(max - min);
+      var certificateId = "ID" + rNum.toString();
       // formData.update({'':''})
       DocumentReference registerUser = FirebaseFirestore.instance
           .collection("registeredIndividual")
@@ -299,11 +327,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 'dob': date,
                 'status': 'secondDoseDone',
                 'role': 'patient',
-                'firstDose': DateFormat("dd-MM-yyyy").format(DateTime.now()),
-                // 'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
+                'firstDose': DateFormat("dd-MM-yyyy").format(
+                  DateTime.now(),
+                ),
+                'secondDose': '',
+                'certificateID': certificateId,
               }).then((value) {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return CertificateScreen(identityNumber: formData['identityNumber']);
+                  return CertificateScreen(
+                      identityNumber: formData['identityNumber']);
                 }));
                 Fluttertoast.showToast(
                     msg: "Individual record has been stored successfully");
@@ -326,7 +358,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 'role': 'patient',
                 'status': 'firstDoseDone',
                 'firstDose': DateFormat("dd-MM-yyyy").format(DateTime.now()),
-                // 'lastUpadte': DateFormat("dd-MM-yyyy").format(DateTime.now())
+                'secondDose': DateFormat("dd-MM-yyyy").format(DateTime.now()),
+                'certificateID': certificateId,
               }).then((value) {
                 Fluttertoast.showToast(
                     msg: "Individual record has been stored successfully");

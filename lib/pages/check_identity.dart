@@ -4,7 +4,6 @@ import 'package:covid_19/pages/register.dart';
 import 'package:covid_19/pages/second_dose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:covid_19/pages/login.dart';
 
@@ -88,6 +87,15 @@ class _CheckIdentityState extends State<CheckIdentity> {
                             ),
                           ),
                         ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return RegisterScreen();
+                      }));
+                    },
+                    child: Text("Register new individual"),
+                  )
                 ],
               ),
             ),
