@@ -307,13 +307,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         isValidating = true;
       });
       final formData = _formKey.currentState!.value;
+      Random rnd = new Random();
+// Define min and max value
+      int min = 10000000, max = 99999999;
+//Getting range
+      int certificateId = min + rnd.nextInt(max - min);
+      // print("$num is in the range of $min and $max");
 
-      int min = 1000000000; //min and max values act as your 6 digit range
-      int max = 9999999999;
-      var randomizer = new Random();
-      var rNum = min + randomizer.nextInt(max - min);
-      var certificateId = "ID" + rNum.toString();
-      // formData.update({'':''})
       DocumentReference registerUser = FirebaseFirestore.instance
           .collection("registeredIndividual")
           .doc(formData['identityNumber']);
@@ -331,7 +331,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   DateTime.now(),
                 ),
                 'secondDose': '',
-                'certificateID': certificateId,
+                'certificateID': certificateId.toString(),
               }).then((value) {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return CertificateScreen(
@@ -359,7 +359,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 'status': 'firstDoseDone',
                 'firstDose': DateFormat("dd-MM-yyyy").format(DateTime.now()),
                 'secondDose': DateFormat("dd-MM-yyyy").format(DateTime.now()),
-                'certificateID': certificateId,
+                'certificateID': certificateId.toString(),
               }).then((value) {
                 Fluttertoast.showToast(
                     msg: "Individual record has been stored successfully");

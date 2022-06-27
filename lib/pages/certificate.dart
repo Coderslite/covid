@@ -1,9 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart ' as pw;
 import 'package:qr_flutter/qr_flutter.dart';
 
 class CertificateScreen extends StatefulWidget {
@@ -16,25 +12,25 @@ class CertificateScreen extends StatefulWidget {
 }
 
 class _CertificateScreenState extends State<CertificateScreen> {
-  getPdf() async {
-    pw.Document pdf = pw.Document();
-    pdf.addPage(
-      pw.Page(
-        pageFormat: PdfPageFormat.a4,
-        build: (context) {
-          return pw.Expanded(
-            child: pw.Text("How are you"),
-          );
-        },
-      ),
-    );
-    File pdfFile = File('Your path + File name');
-    pdfFile.writeAsBytesSync(pdf.save());
-  }
+  // getPdf() async {
+  //   pw.Document pdf = pw.Document();
+  //   pdf.addPage(
+  //     pw.Page(
+  //       pageFormat: PdfPageFormat.a4,
+  //       build: (context) {
+  //         return pw.Expanded(
+  //           child: pw.Text("How are you"),
+  //         );
+  //       },
+  //     ),
+  //   );
+  //   File pdfFile = File('Your path + File name');
+  //   pdfFile.writeAsBytesSync(pdf.save());
+  // }
 
   // late String _inputErrorText;
   @override
-  Widget build(BuildContextcontext) {
+  Widget build(BuildContext) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Vaccine Certificate"),
@@ -47,7 +43,7 @@ class _CertificateScreenState extends State<CertificateScreen> {
               children: [
                 GestureDetector(
                     onTap: () {
-                      getPdf();
+                      // getPdf();
                     },
                     child: Text("Print Now")),
               ],
@@ -256,6 +252,7 @@ class _CertificateScreenState extends State<CertificateScreen> {
                 Row(
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -299,35 +296,36 @@ class _CertificateScreenState extends State<CertificateScreen> {
                             )
                           ],
                         ),
-                      ],
-                    ),
-                    data['secondDose'] != null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text("Vaccine Type : "),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                data['vaccineType'],
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          )
-                        : const Text(""),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
-                        Text("Status : "),
-                        SizedBox(
-                          width: 5,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text("SecondDose : "),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              data['secondDose'] != null ||
+                                      data['secondDose'] != ''
+                                  ? data['secondDose']
+                                  : '',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ],
                         ),
-                        Text(
-                          "Vacinnated",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Text("Status : "),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Vacinnated",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -350,8 +348,8 @@ class _CertificateScreenState extends State<CertificateScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Text(
-                        "5555s",
+                      Text(
+                        data['certificateID'],
                         style: TextStyle(
                             // fontWeight: FontWeight.bold,
                             ),
