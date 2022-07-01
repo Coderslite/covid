@@ -1,6 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:covid_19/pages/preview_certificate.dart';
+import 'package:covid_19/pages/printable_data.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class CertificateScreen extends StatefulWidget {
   final String identityNumber;
@@ -12,23 +20,7 @@ class CertificateScreen extends StatefulWidget {
 }
 
 class _CertificateScreenState extends State<CertificateScreen> {
-  // getPdf() async {
-  //   pw.Document pdf = pw.Document();
-  //   pdf.addPage(
-  //     pw.Page(
-  //       pageFormat: PdfPageFormat.a4,
-  //       build: (context) {
-  //         return pw.Expanded(
-  //           child: pw.Text("How are you"),
-  //         );
-  //       },
-  //     ),
-  //   );
-  //   File pdfFile = File('Your path + File name');
-  //   pdfFile.writeAsBytesSync(pdf.save());
-  // }
-
-  // late String _inputErrorText;
+  var userData = {};
   @override
   Widget build(BuildContext) {
     return Scaffold(
@@ -38,12 +30,45 @@ class _CertificateScreenState extends State<CertificateScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
+                  onTap: () {
+                    shareDoc(
+                      userData['name'],
+                      userData['email'],
+                      userData['gender'],
+                      userData['tel'],
+                      userData['address'],
+                      userData['dob'],
+                      userData['identityNumber'],
+                      userData['vaccineType'],
+                      userData['firstDose'],
+                      userData['secondDose'],
+                      userData['certificateID'],
+                    );
+                  },
+                  child: Text("Share"),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                GestureDetector(
                     onTap: () {
-                      // getPdf();
+                      printDoc(
+                        userData['name'],
+                        userData['email'],
+                        userData['gender'],
+                        userData['tel'],
+                        userData['address'],
+                        userData['dob'],
+                        userData['identityNumber'],
+                        userData['vaccineType'],
+                        userData['firstDose'],
+                        userData['secondDose'],
+                        userData['certificateID'],
+                      );
                     },
                     child: Text("Print Now")),
               ],
@@ -64,6 +89,7 @@ class _CertificateScreenState extends State<CertificateScreen> {
               if (snapshot.hasData) {
                 Map<String, dynamic> data =
                     snapshot.data!.data() as Map<String, dynamic>;
+                userData = data;
                 return certificateScreen(
                   context,
                   data,
@@ -285,7 +311,7 @@ class _CertificateScreenState extends State<CertificateScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Text("FirstDOse : "),
+                            const Text("FirstDose : "),
                             const SizedBox(
                               width: 5,
                             ),
@@ -398,5 +424,53 @@ class _CertificateScreenState extends State<CertificateScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> printDoc(
+      String name,
+      String email,
+      String gender,
+      String tel,
+      String address,
+      String dob,
+      String cnic,
+      String vaccineType,
+      String fDose,
+      String sDose,
+      String certificateNo) async {
+    // final image = await imageFromAssetBundle("images/logo.png");
+    final doc = pw.Document();
+    doc.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return buildPrintableData(name, email, gender, tel, address, dob,
+              cnic, vaccineType, fDose, sDose, certificateNo);
+        }));
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
+  }
+
+  Future<void> shareDoc(
+      String name,
+      String email,
+      String gender,
+      String tel,
+      String address,
+      String dob,
+      String cnic,
+      String vaccineType,
+      String fDose,
+      String sDose,
+      String certificateNo) async {
+    // final image = await imageFromAssetBundle("images/logo.png");
+    final doc = pw.Document();
+    doc.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return buildPrintableData(name, email, gender, tel, address, dob,
+              cnic, vaccineType, fDose, sDose, certificateNo);
+        }));
+    await Printing.sharePdf(
+        bytes: await doc.save(), filename: 'my-cnic.pdf');
   }
 }
