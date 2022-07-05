@@ -135,6 +135,7 @@ class _SecondDoseState extends State<SecondDose> {
     );
   }
 
+  //this function confirm second dose of vaccine taken by updating the status to secondDoseDone
   handleSecondDose() async {
     setState(() {
       isValidating = true;

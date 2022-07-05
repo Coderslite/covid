@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:covid_19/pages/login.dart';
-import 'package:covid_19/pages/verifier/vacination_location.dart';
 import 'package:covid_19/pages/verifier/verify_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

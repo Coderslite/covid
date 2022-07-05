@@ -51,6 +51,7 @@ dependencies:
   horizontal_data_table: ^3.6.1+1
   pdf: 
   pattern_formatter: ^2.0.0
+  intl_phone_number_input: ^0.7.0+2
 
 dev_dependencies:
   flutter_test:

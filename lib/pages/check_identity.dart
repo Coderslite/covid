@@ -105,6 +105,8 @@ class _CheckIdentityState extends State<CheckIdentity> {
     );
   }
 
+
+// this function  checks if the use data exist in the database. if it exist, it checks the status of the user, where firstDoseDone or secondDoseDone. if not exist, it throws an error to register the user..
   void handleValidate() async {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {

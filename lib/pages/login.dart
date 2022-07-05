@@ -148,6 +148,9 @@ class _LoginScreemState extends State<LoginScreen> {
     );
   }
 
+// this function login user depending on their role
+
+// first is gets the user details and check the 'role', and the password and email matches, it logs the user in
   handleLogin() {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {
@@ -175,7 +178,7 @@ class _LoginScreemState extends State<LoginScreen> {
             ),
           );
         }
-
+// if role is verifier and password do not match with user input, it throws an errow
         if (value['role'] == 'verifier' &&
             value['password'] != formData['password']) {
           setState(() {
@@ -187,6 +190,7 @@ class _LoginScreemState extends State<LoginScreen> {
             action: SnackBarAction(label: "Retry Again", onPressed: () {}),
           ));
         }
+        // if role is verifier and password matches, its logs user in to verifier panel
         if (value['role'] == 'registrar' &&
             value['password'] == formData['password']) {
           setState(() {
@@ -215,28 +219,8 @@ class _LoginScreemState extends State<LoginScreen> {
             action: SnackBarAction(label: "Retry Again", onPressed: () {}),
           ));
         }
-        // if (value['role'] == 'patient' &&
-        //     value['password'] == formData['password']) {
-        //   setState(() {
-        //     isChecking = false;
-        //   });
-        //   Navigator.push(context, MaterialPageRoute(builder: (_) {
-        //     return CertificateScreen(identityNumber: value['identityNumber']);
-        //   }));
-        //   print('patient');
-        // }
-        // if (value['role'] == 'patient' &&
-        //     value['password'] != formData['password']) {
-        //   setState(() {
-        //     isChecking = false;
-        //   });
-        //   print('password not correct');
-        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //     duration: const Duration(seconds: 10),
-        //     content: const Text("Password not correct "),
-        //     action: SnackBarAction(label: "Retry Again", onPressed: () {}),
-        //   ));
-        // }
+        
+        // if role is admin and password matches with user input,it logs user in to admin panel
         if (value['role'] == 'admin' &&
             value['password'] == formData['password']) {
           setState(() {
@@ -248,6 +232,8 @@ class _LoginScreemState extends State<LoginScreen> {
             );
           }));
         }
+         
+         // if role is admin and password do not match with user, it throws an error that password not correct
         if (value['role'] == 'admin' &&
             value['password'] != formData['password']) {
           setState(() {
@@ -265,39 +251,40 @@ class _LoginScreemState extends State<LoginScreen> {
         setState(() {
           isChecking = false;
         });
+
+        // if user not found in the users table in the database, if checks in the registeredIndividual table in the database
+
         FirebaseFirestore.instance
             .collection("registeredIndividual")
             .where('email', isEqualTo: formData['email'])
             .get()
             .then((value) {
+
+              // if user is found in the registeredIndividual table, it gets the details and check the status
           var userData = value.docs[0];
+          // if password and email is corresponding to the one in the registeredIndividual table in the table, it perform the function below
           if (userData['email'] == formData['email'] &&
               userData['password'] == formData['password']) {
+               
+               // if user status is firstDoseDone, it throw a message below that dose not completed
             if (userData['status'] == 'firstDoseDone') {
               print("first dose done");
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                duration: const Duration(seconds: 10),
-                content: const Text("First Dose Done !!!"),
-                action: SnackBarAction(
-                    label: "Next Dose",
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return SecondDose(
-                          identityNumber: userData['identityNumber'],
-                        );
-                      }));
-                    }),
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                duration:Duration(seconds: 10),
+                content: Text("First Dose Done !!!,Meet registrar to complete dose"),
+         
               ));
             } else {
-              print("second dose done");
-
+              // if dose is equal to secondDoseDone, it redirects to certificate screen
               Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return CertificateScreen(
                   identityNumber: userData['identityNumber'],
                 );
               }));
             }
-          } else if (userData['email'] == formData['email'] &&
+          } 
+          // if password is not correct, it throws an errow message
+          else if (userData['email'] == formData['email'] &&
               userData['password'] != formData['password']) {
             print("password not correct");
           } else {

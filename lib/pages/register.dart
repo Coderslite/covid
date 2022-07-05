@@ -313,6 +313,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+// this function handle registration of new user to firebase
   handleRegister(date) async {
     _formKey.currentState!.save();
     if (_formKey.currentState!.validate()) {
@@ -320,17 +321,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         isValidating = true;
       });
       final formData = _formKey.currentState!.value;
+      //get random number for certificate
       Random rnd = new Random();
-// Define min and max value
       int min = 10000000, max = 99999999;
-//Getting range
       int certificateId = min + rnd.nextInt(max - min);
-      // print("$num is in the range of $min and $max");
 
       DocumentReference registerUser = FirebaseFirestore.instance
           .collection("registeredIndividual")
           .doc(formData['identityNumber']);
       registerUser.set(formData).whenComplete(() {
+        // check if vaccine type is jassen and set status to secondDoseDone because jassen is only vaccinated once
         formData['vaccineType'] == 'Janssen'
             ? FirebaseFirestore.instance
                 .collection("registeredIndividual")
