@@ -21,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   TextEditingController dateController = TextEditingController();
   bool isValidating = false;
+  var date = new DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +121,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         FormBuilderValidators.required(context),
                         FormBuilderValidators.numeric(context),
                       ]),
+                      //  inputFormatters: [
+                      //     CreditCardFormatter(),
+                      //   ],
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.perm_identity_outlined),
                         contentPadding:
@@ -200,12 +204,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       height: 20,
                     ),
+                    Text(
+                      "You must be above 5years and below 100years to take vaccine",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
                     FormBuilderDateTimePicker(
                       name: 'dob',
                       keyboardType: TextInputType.datetime,
                       controller: dateController,
                       inputType: InputType.date,
-                      format: DateFormat("dd-MM-yyyy"),
+                      firstDate: DateTime(date.year - 100),
+                      lastDate: DateTime(date.year - 5),
+                      initialDate: DateTime(date.year - 5),
+                      // format: DateFormat("dd-MM-yyyy"),
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(context),
                       ]),

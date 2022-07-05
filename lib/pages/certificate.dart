@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:covid_19/pages/preview_certificate.dart';
 import 'package:covid_19/pages/printable_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -426,7 +426,7 @@ class _CertificateScreenState extends State<CertificateScreen> {
     );
   }
 
-  Future<void> printDoc(
+  Future printDoc(
       String name,
       String email,
       String gender,
@@ -439,6 +439,7 @@ class _CertificateScreenState extends State<CertificateScreen> {
       String sDose,
       String certificateNo) async {
     // final image = await imageFromAssetBundle("images/logo.png");
+
     final doc = pw.Document();
     doc.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -462,7 +463,7 @@ class _CertificateScreenState extends State<CertificateScreen> {
       String fDose,
       String sDose,
       String certificateNo) async {
-    // final image = await imageFromAssetBundle("images/logo.png");
+ 
     final doc = pw.Document();
     doc.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,

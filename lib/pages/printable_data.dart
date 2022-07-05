@@ -1,8 +1,10 @@
 import 'dart:ffi';
 
+import 'package:flutter/widgets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:qr_flutter/qr_flutter.dart';
+
 
 buildPrintableData(
         String name,
@@ -33,6 +35,7 @@ buildPrintableData(
             child: pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
+
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
@@ -167,8 +170,7 @@ buildPrintableData(
                       )),
                   pw.Text(secondDose),
                 ]),
-            // pw.Qr
-          ])
+          ]),
         ],
       ),
     );
