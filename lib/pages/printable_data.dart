@@ -33,98 +33,114 @@ buildPrintableData(
             child: pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
-                pw.Column(children: [
-                  pw.Row(children: [
-                    pw.Text('Name:'),
-                    pw.SizedBox(width: 10),
-                    pw.Text('name',
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                        )),
-                  ]),
-                  pw.Row(children: [
-                    pw.Text('Email:'),
-                    pw.SizedBox(width: 10),
-                    pw.Text('email',
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                        )),
-                  ]),
-                  pw.Row(children: [
-                    pw.Text('Gender:'),
-                    pw.SizedBox(width: 10),
-                    pw.Text('gender',
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                        )),
-                  ]),
-                ]),
-                pw.Column(children: [
-                  pw.Row(children: [
-                    pw.Text('Tel:'),
-                    pw.SizedBox(width: 10),
-                    pw.Text('tel',
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                        )),
-                  ]),
-                  pw.Row(children: [
-                    pw.Text('Address:'),
-                    pw.SizedBox(width: 10),
-                    pw.Text('address',
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                        )),
-                  ]),
-                  pw.Row(children: [
-                    pw.Text('Dob:'),
-                    pw.SizedBox(width: 10),
-                    pw.Text('dob',
-                        style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                        )),
-                  ]),
-                ])
+                pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                          children: [
+                            pw.Text('Name:'),
+                            pw.SizedBox(width: 10),
+                            pw.Text(name,
+                                style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold,
+                                )),
+                          ]),
+                      pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                          children: [
+                            pw.Text('Email:'),
+                            pw.SizedBox(width: 10),
+                            pw.Text(email,
+                                style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold,
+                                )),
+                          ]),
+                      pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                          children: [
+                            pw.Text('Gender:'),
+                            pw.SizedBox(width: 10),
+                            pw.Text(gender,
+                                style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold,
+                                )),
+                          ]),
+                    ]),
+                pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                          children: [
+                            pw.Text('Tel:'),
+                            pw.SizedBox(width: 10),
+                            pw.Text(tel,
+                                style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold,
+                                )),
+                          ]),
+                      pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                          children: [
+                            pw.Text('Address:'),
+                            pw.SizedBox(width: 10),
+                            pw.Text(address,
+                                style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold,
+                                )),
+                          ]),
+                      pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                          children: [
+                            pw.Text('Dob:'),
+                            pw.SizedBox(width: 10),
+                            pw.Text(dob,
+                                style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold,
+                                )),
+                          ]),
+                    ])
               ],
             ),
           ),
           pw.SizedBox(
             height: 20,
           ),
-          pw.Column(children: [
+          pw.Column(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
             pw.Row(children: [
               pw.Text('Identity Number:'),
               pw.SizedBox(width: 10),
-              pw.Text('cnic',
+              pw.Text(cnic,
                   style: pw.TextStyle(
                     fontWeight: pw.FontWeight.bold,
                   )),
             ]),
-            pw.Row(children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
               pw.Text('VaccineType:'),
               pw.SizedBox(width: 10),
-              pw.Text('vaccineType',
+              pw.Text(vaccineType,
                   style: pw.TextStyle(
                     fontWeight: pw.FontWeight.bold,
                   )),
             ]),
-            pw.Row(children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
               pw.Text('FirstDose:'),
               pw.SizedBox(width: 10),
-              pw.Text('firstDose',
+              pw.Text(firstDose,
                   style: pw.TextStyle(
                     fontWeight: pw.FontWeight.bold,
                   )),
             ]),
-            pw.Row(children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
               pw.Text('SecondDose:'),
               pw.SizedBox(width: 10),
-              pw.Text('secondDose',
+              pw.Text(secondDose,
                   style: pw.TextStyle(
                     fontWeight: pw.FontWeight.bold,
                   )),
             ]),
-            pw.Row(children: [
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
               pw.Text('Status:'),
               pw.SizedBox(width: 10),
               pw.Text('vaccinated',
@@ -133,22 +149,25 @@ buildPrintableData(
                   )),
             ]),
           ]),
-          pw.Row(children: [
-            pw.Column(children: [
-              pw.Text("Certificate No",
-                  style: pw.TextStyle(
-                    fontWeight: pw.FontWeight.bold,
-                  )),
-              pw.Text('certificateNo'),
-              pw.SizedBox(
-                height: 10,
-              ),
-              pw.Text("Issued Date",
-                  style: pw.TextStyle(
-                    fontWeight: pw.FontWeight.bold,
-                  )),
-              pw.Text('secondDose'),
-            ])
+          pw.SizedBox(
+            height: 20,
+          ),
+          pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
+            pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text("Certificate No",
+                      style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                      )),
+                  pw.Text(certificateNo),
+                  pw.Text("Issued Date",
+                      style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                      )),
+                  pw.Text(secondDose),
+                ]),
+            // pw.Qr
           ])
         ],
       ),

@@ -402,7 +402,7 @@ class _CertificateScreenState extends State<CertificateScreen> {
                   QrImage(
                     backgroundColor: Colors.white,
                     gapless: false,
-                    embeddedImage: const AssetImage('images/logo.png'),
+                    // embeddedImage: const AssetImage('images/logo.png'),
                     embeddedImageStyle: QrEmbeddedImageStyle(
                       size: const Size(50, 50),
                     ),
@@ -470,7 +470,6 @@ class _CertificateScreenState extends State<CertificateScreen> {
           return buildPrintableData(name, email, gender, tel, address, dob,
               cnic, vaccineType, fDose, sDose, certificateNo);
         }));
-    await Printing.sharePdf(
-        bytes: await doc.save(), filename: 'my-cnic.pdf');
+    await Printing.sharePdf(bytes: await doc.save(), filename: 'my-cnic.pdf');
   }
 }

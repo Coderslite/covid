@@ -207,7 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       inputType: InputType.date,
                       format: DateFormat("dd-MM-yyyy"),
                       validator: FormBuilderValidators.compose([
-                        // FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(context),
                       ]),
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.person),

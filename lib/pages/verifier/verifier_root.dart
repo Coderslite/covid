@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:covid_19/pages/login.dart';
 import 'package:covid_19/pages/verifier/vacination_location.dart';
+import 'package:covid_19/pages/verifier/verify_user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -14,7 +15,7 @@ class VerifierRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Verifier Panel')),
-            floatingActionButton: CircleAvatar(
+      floatingActionButton: CircleAvatar(
         backgroundColor: Colors.redAccent,
         child: IconButton(
             onPressed: () {
@@ -41,10 +42,10 @@ class VerifierRoot extends StatelessWidget {
             TextButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return VaccineLocation();
+                    return const VerifyUser();
                   }));
                 },
-                child: const Text("Check Nearest Vacination center"))
+                child: const Text("Verify User"))
           ],
         ),
       ),
