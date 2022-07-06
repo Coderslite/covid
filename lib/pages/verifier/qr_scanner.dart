@@ -23,7 +23,7 @@ class QrScanner extends StatelessWidget {
           child: const Text('qrView'),
         ),
       ),
-    );
+    );  
   }
 }
 
